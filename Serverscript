@@ -1,0 +1,18 @@
+#cloud-config
+# 1. SEGURIDAD: Usuario y Contraseña
+password: 123
+chpasswd: { expire: False }
+ssh_pwauth: True
+# 2. INSTALACIÓN DE SOFTWARE NFS
+package_upgrade: true
+packages:
+- nfs-kernel-server
+# 3. CONFIGURACIÓN INICIAL DEL RECURSO COMPARTIDO
+runcmd:
+# Crear la carpeta compartida
+- mkdir -p /var/nfs/general
+# Configurar el archivo /etc/exports (La red 192.168.100.0/24 es la tuya)
+- echo '/var/nfs/general 192.168.100.0/24(rw,sync,no_subtree_check)' | tee -a /etc/exports
+# Asignar permisos para evitar errores de "Access Denied" en el cliente
+- chown nobody:nogroup /var/nfs/general
+- chmod 777 /var/nfs/general
