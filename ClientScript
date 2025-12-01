@@ -1,0 +1,15 @@
+#cloud-config 
+# 1. SEGURIDAD: Contraseña 123 
+password: 123 
+Hacer lo mismo para “LA INSTANCIA” cliente 2 
+chpasswd: { expire: False } 
+ssh_pwauth: True 
+# 2. CONFIGURACIÓN DEL CLIENTE NFS 
+package_upgrade: true 
+packages: - nfs-common 
+runcmd: 
+# Crear el punto de montaje local - mkdir -p /mnt/datos_servidor 
+# Configurar /etc/fstab para montaje automático del recurso compartido 
+# IP DEL SERVIDOR: 192.168.100.108 - echo '192.168.100.108:/var/nfs/general /mnt/datos_servidor nfs defaults,_netdev 
+0 0' >> /etc/fstab 
+# Montar la unidad inmediatamente - mount -a 
